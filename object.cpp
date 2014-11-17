@@ -23,10 +23,10 @@ GLfloat vase_ver1[6][4][3] = { { { 1, 4, 0 }, { 0.5, 3, 0 }, { 2, 1, 0 }, { 1.5,
 
 
 
-
+GLfloat M[16];
 
 void directionalLightShadow(double dx, double dy, double dz,
-	double a, double b, double c, double d, GLfloat M[16]) {
+	double a, double b, double c, double d) {
 	M[0] = b*dy + c*dz;  M[4] = -b*dx;  M[8] = -c*dx;  M[12] = -d*dx;
 	M[1] = -a*dy;  M[5] = a*dx + c*dz;  M[9] = -c*dy;  M[13] = -d*dy;
 	M[2] = -a*dz;  M[6] = -b*dz;  M[10] = a*dx + b*dy;  M[14] = -d*dz;
@@ -79,7 +79,7 @@ void Wall::wall(){
 		glMaterialfv(GL_FRONT, GL_AMBIENT, earth_mat_ambient);
 		glMaterialfv(GL_FRONT, GL_DIFFUSE, earth_mat_diffuse);
 		glMaterialfv(GL_FRONT, GL_SPECULAR, earth_mat_specular);
-		glMaterialf(GL_FRONT, GL_SHININESS, earth_mat_shininess);
+		//glMaterialf(GL_FRONT, GL_SHININESS, earth_mat_shininess);
 
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);//FRONT_AND_
 		//glBindTexture(GL_TEXTURE_2D, texture[2]);
@@ -144,37 +144,36 @@ void Table::draw_table(){
 
 
 void Table::shadow(){
-	GLfloat M[16];
 
 	glColor4f(0., 0., 0., 1.);
 	glDisable(GL_LIGHTING);
 	//table shadow
 	glPushMatrix();
-	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, 1, 0, 1.1, M);
+	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, 1, 0, 1.1);
 	glMultMatrixf(M);
 	draw_table();
 	glPopMatrix();
 
 	glPushMatrix();
-	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 1, 0, 0, 1.5, M);
+	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 1, 0, 0, 1.5);
 	glMultMatrixf(M);
 	draw_table();
 	glPopMatrix();
 
 	glPushMatrix();
-	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], -1, 0, 0, 1.5, M);
+	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], -1, 0, 0, 1.5);
 	glMultMatrixf(M);
 	draw_table();
 	glPopMatrix();
 
 	glPushMatrix();
-	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, 0, 1, 1.1, M);
+	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, 0, 1, 1.1);
 	glMultMatrixf(M);
 	draw_table();
 	glPopMatrix();
 
 	glPushMatrix();
-	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, -1, 0, 1.1, M);
+	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, -1, 0, 1.1);
 	glMultMatrixf(M);
 	draw_table();
 	glPopMatrix();
@@ -239,7 +238,8 @@ void Chair::draw_chair(){
 }
 
 void Tellurion::tellurion(){
-
+	glPushMatrix();
+	glTranslatef(-0.2, -0.2, -0.2);
 	glBindTexture(GL_TEXTURE_2D, texture[1]);
 
 	GLUquadricObj *quadObj = gluNewQuadric();//create a curve
@@ -249,6 +249,7 @@ void Tellurion::tellurion(){
 	gluSphere(quadObj, 0.15, 20, 20); 
 	gluDeleteQuadric(quadObj);
 
+	glPopMatrix();
 
 }
 
@@ -278,46 +279,43 @@ void Tellurion::draw_tellution(){
 	glMaterialfv(GL_FRONT, GL_SPECULAR, earth_mat_specular);
 	glMaterialf(GL_FRONT, GL_SHININESS, earth_mat_shininess);
 
-	glPushMatrix();
-	glTranslatef(-0.2, -0.2, -0.2);
-	//glRotatef(90, 0, 1, 0);
 	tellurion();
-	glPopMatrix();
 
 	tellurion_holder();
 }
 
 void Tellurion::shadow(){
-	GLfloat M[16];
+	
 
 	glColor4f(0., 0., 0., 1.);
 	glDisable(GL_LIGHTING);
 	//table shadow
 
 	glPushMatrix();
-	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 1, 0, 0, 1.5, M);
+	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 1, 0, 0, 3.5);
 	glMultMatrixf(M);
 	draw_tellution();
 	glPopMatrix();
 
 	glPushMatrix();
-	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], -1, 0, 0, 1.5, M);
+	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], -1, 0, 0, 1.5);
 	glMultMatrixf(M);
 	draw_tellution();
 	glPopMatrix();
 
 	glPushMatrix();
-	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, 0, 1, 1.1, M);
+	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, 0, 1, 1.1);
 	glMultMatrixf(M);
 	draw_tellution();
 	glPopMatrix();
 
+	
 	glPushMatrix();
-	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, -1, 0, 0.55, M);//shadow on the table top 
+	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, 1, 0, 0.45);//shadow on the table top 
 	glMultMatrixf(M);
 	draw_tellution();
 	glPopMatrix();
-
+	
 
 }
 
@@ -364,32 +362,33 @@ void Vase::draw_vase(){
 }
 
 void Vase::shadow(){
-	GLfloat M[16];
+	
 
 	glColor4f(0., 0., 0., 1.);
 	glDisable(GL_LIGHTING);
 	//table shadow
 
 	glPushMatrix();
-	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 1, 0, 0, 1.5, M);
+	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 1, 0, 0, 1.5);
 	glMultMatrixf(M);
 	draw_vase();
 	glPopMatrix();
 
 	glPushMatrix();
-	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], -1, 0, 0, 1.5, M);
+	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], -1, 0, 0, 1.5);
 	glMultMatrixf(M);
 	draw_vase();
 	glPopMatrix();
 
 	glPushMatrix();
-	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, 0, 1, 1.1, M);
+	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, 0, 1, 1.1);
 	glMultMatrixf(M);
 	draw_vase();
 	glPopMatrix();
 
+	
 	glPushMatrix();
-	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, -1, 0, 0.55, M);//shadow on the table top 
+	directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, 1, 0, 0.45); 
 	glMultMatrixf(M);
 	draw_vase();
 	glPopMatrix();
@@ -440,7 +439,7 @@ void Dragon::draw_dragon(){
 
 	glEnable(GL_NORMALIZE);
 	glPushMatrix();
-	glTranslatef(0.2, -0.1, 0.55);
+	glTranslatef(0.2, -0.2, 0.15);
 	glScalef(0.5, 0.5, 0.5);
 	glBegin(GL_TRIANGLES);
 	for (int i = 0; i<25000; i++){
@@ -457,36 +456,37 @@ void Dragon::draw_dragon(){
 }
 
 void Dragon::shadow(){
-		GLfloat M[16];
+		
 
 		glColor4f(0., 0., 0., 1.);
 		glDisable(GL_LIGHTING);
 		//table shadow
 
 		glPushMatrix();
-		directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 1, 0, 0, 1.5, M);
+		directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 1, 0, 0, 1.5);
 		glMultMatrixf(M);
 		draw_dragon();
 		glPopMatrix();
 
 		glPushMatrix();
-		directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], -1, 0, 0, 1.5, M);
+		directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], -1, 0, 0, 1.5);
 		glMultMatrixf(M);
 		draw_dragon();
 		glPopMatrix();
 
 		glPushMatrix();
-		directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, 0, 1, 1.1, M);
+		directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, 0, 1, 1.1);
 		glMultMatrixf(M);
 		draw_dragon();
 		glPopMatrix();
 
+		
 		glPushMatrix();
-		directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, -1, 0, 0.55, M);//shadow on the table top 
+		directionalLightShadow(-light_direction[0], -light_direction[1], -light_direction[2], 0, 1, 0, 0.45);//shadow on the table top 
 		glMultMatrixf(M);
 		draw_dragon();
 		glPopMatrix();
-
+		
 
 	
 }
