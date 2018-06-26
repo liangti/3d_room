@@ -13,4 +13,4 @@ Last, solve the problem caused by file stream.
 However, there is still a lot of bug. For example, I can't draw the chair because it will cause some error while translating. 
 And the shadow is not accurately. Maybe someone could help me.
 
-My email is 469140303@qq.com.
+
